@@ -254,7 +254,6 @@ namespace EngiMechSpiders
                                 ItemIndex scepterIndex = ItemCatalog.FindItemIndex("ITEM_ANCIENT_SCEPTER");
                                 if (scepterIndex != ItemIndex.None && deployable.ownerMaster.inventory.GetItemCount(scepterIndex) > 0)
                                 {
-                                    Debug.Log("Adding MechSpider Scepter item.");
                                     inv.GiveItem(MechSpiderScepterItem);
                                 }
                             }
