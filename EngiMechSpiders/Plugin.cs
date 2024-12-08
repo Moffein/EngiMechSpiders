@@ -4,6 +4,7 @@ using EngiMechSpiders.Modules;
 using EntityStates;
 using EntityStates.Engi.EngiWeapon;
 using R2API;
+using R2API.Utils;
 using RoR2;
 using RoR2.Skills;
 using System;
@@ -24,6 +25,7 @@ namespace EngiMechSpiders
     [BepInDependency(EnemiesReturnsPlugin.GUID)]
     [BepInDependency("com.DestroyedClone.AncientScepter", BepInDependency.DependencyFlags.SoftDependency)]
     [BepInPlugin("com.Moffein.EngiMechSpiders", "EngiMechSpiders", "1.0.0")]
+    [NetworkCompatibility(CompatibilityLevel.EveryoneMustHaveMod, VersionStrictness.EveryoneNeedSameModVersion)]
     public class EngiMechSpiderPlugin : BaseUnityPlugin
     {
         internal static PluginInfo pluginInfo;
