@@ -24,7 +24,7 @@ namespace EngiMechSpiders
     [BepInDependency(R2API.ContentManagement.R2APIContentManager.PluginGUID)]
     [BepInDependency(EnemiesReturnsPlugin.GUID)]
     [BepInDependency("com.DestroyedClone.AncientScepter", BepInDependency.DependencyFlags.SoftDependency)]
-    [BepInPlugin("com.Moffein.EngiMechSpiders", "EngiMechSpiders", "1.0.0")]
+    [BepInPlugin("com.Moffein.EngiMechSpiders", "EngiMechSpiders", "1.1.0")]
     [NetworkCompatibility(CompatibilityLevel.EveryoneMustHaveMod, VersionStrictness.EveryoneNeedSameModVersion)]
     public class EngiMechSpiderPlugin : BaseUnityPlugin
     {
@@ -199,6 +199,16 @@ namespace EngiMechSpiders
             RoR2.CharacterBody.onBodyInventoryChangedGlobal += FixDeathState;
 
             On.RoR2.CharacterMaster.AddDeployable += CharacterMaster_AddDeployable;
+            On.EntityStates.BaseState.OnEnter += BaseState_OnEnter;
+        }
+
+        private void BaseState_OnEnter(On.EntityStates.BaseState.orig_OnEnter orig, BaseState self)
+        {
+            orig(self);
+            if (self.characterBody && self.characterBody.inventory && self.characterBody.inventory.GetItemCount(MechSpiderStatItem) > 0)
+            {
+                self.damageStat *= 2.5f;
+            }
         }
 
         private void FixDeathState(CharacterBody body)
@@ -217,8 +227,8 @@ namespace EngiMechSpiders
                 args.baseRegenAdd += 1f;
                 args.levelRegenAdd += 0.2f;
 
-                args.baseDamageAdd += 18f;
-                args.levelDamageAdd += 3.6f;
+                //args.baseDamageAdd += 18f;
+                //args.levelDamageAdd += 3.6f;
 
                 //These don't sprint, so up the speed from 9m/s to 10.15m/s to match player base sprint speed.
                 args.baseMoveSpeedAdd += 1.15f;
