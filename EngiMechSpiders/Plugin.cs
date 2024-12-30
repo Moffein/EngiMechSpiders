@@ -24,7 +24,7 @@ namespace EngiMechSpiders
     [BepInDependency(R2API.ContentManagement.R2APIContentManager.PluginGUID)]
     [BepInDependency(EnemiesReturnsPlugin.GUID)]
     [BepInDependency("com.DestroyedClone.AncientScepter", BepInDependency.DependencyFlags.SoftDependency)]
-    [BepInPlugin("com.Moffein.EngiMechSpiders", "EngiMechSpiders", "1.1.0")]
+    [BepInPlugin("com.Moffein.EngiMechSpiders", "EngiMechSpiders", "1.1.1")]
     [NetworkCompatibility(CompatibilityLevel.EveryoneMustHaveMod, VersionStrictness.EveryoneNeedSameModVersion)]
     public class EngiMechSpiderPlugin : BaseUnityPlugin
     {
@@ -199,16 +199,20 @@ namespace EngiMechSpiders
             RoR2.CharacterBody.onBodyInventoryChangedGlobal += FixDeathState;
 
             On.RoR2.CharacterMaster.AddDeployable += CharacterMaster_AddDeployable;
-            On.EntityStates.BaseState.OnEnter += BaseState_OnEnter;
+            On.RoR2.HealthComponent.TakeDamageProcess += HealthComponent_TakeDamageProcess;
         }
 
-        private void BaseState_OnEnter(On.EntityStates.BaseState.orig_OnEnter orig, BaseState self)
+        private void HealthComponent_TakeDamageProcess(On.RoR2.HealthComponent.orig_TakeDamageProcess orig, HealthComponent self, DamageInfo damageInfo)
         {
-            orig(self);
-            if (self.characterBody && self.characterBody.inventory && self.characterBody.inventory.GetItemCount(MechSpiderStatItem) > 0)
+            if (damageInfo.damageType.IsDamageSourceSkillBased && damageInfo.attacker)
             {
-                self.damageStat *= 2.5f;
+                CharacterBody attackerBody = damageInfo.attacker.GetComponent<CharacterBody>();
+                if (attackerBody && attackerBody.bodyIndex == MechSpiderBodyIndex)
+                {
+                    damageInfo.damage *= 2.5f;
+                }
             }
+            orig(self, damageInfo);
         }
 
         private void FixDeathState(CharacterBody body)
