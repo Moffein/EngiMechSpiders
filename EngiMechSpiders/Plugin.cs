@@ -24,7 +24,7 @@ namespace EngiMechSpiders
     [BepInDependency(R2API.ContentManagement.R2APIContentManager.PluginGUID)]
     [BepInDependency(EnemiesReturnsPlugin.GUID)]
     [BepInDependency("com.DestroyedClone.AncientScepter", BepInDependency.DependencyFlags.SoftDependency)]
-    [BepInPlugin("com.Moffein.EngiMechSpiders", "EngiMechSpiders", "1.1.1")]
+    [BepInPlugin("com.Moffein.EngiMechSpiders", "EngiMechSpiders", "1.1.2")]
     [NetworkCompatibility(CompatibilityLevel.EveryoneMustHaveMod, VersionStrictness.EveryoneNeedSameModVersion)]
     public class EngiMechSpiderPlugin : BaseUnityPlugin
     {
@@ -207,7 +207,7 @@ namespace EngiMechSpiders
             if (damageInfo.damageType.IsDamageSourceSkillBased && damageInfo.attacker)
             {
                 CharacterBody attackerBody = damageInfo.attacker.GetComponent<CharacterBody>();
-                if (attackerBody && attackerBody.bodyIndex == MechSpiderBodyIndex)
+                if (attackerBody && attackerBody.bodyIndex == MechSpiderBodyIndex && attackerBody.inventory && attackerBody.inventory.GetItemCount(MechSpiderStatItem) > 0)
                 {
                     damageInfo.damage *= 2.5f;
                 }
